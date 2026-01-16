@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ブログサイト 開発要件
 
-## Getting Started
+## 概要
 
-First, run the development server:
+Next.js + Markdown構成のブログサイト。記事はGitHubで管理し、pushで自動デプロイ。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ページ構成
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| パス | 内容 |
+|------|------|
+| `/` | トップページ（最新記事数件 + 簡単な紹介） |
+| `/blog` | 記事一覧 |
+| `/blog/[slug]` | 記事詳細 |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 機能一覧
 
-To learn more about Next.js, take a look at the following resources:
+| 機能 | 優先度 | 備考 |
+|------|--------|------|
+| 記事一覧表示 | 必須 | 日付降順 |
+| 記事詳細表示 | 必須 | Markdown→HTML変換 |
+| front matter対応 | 必須 | 記事メタデータをYAML形式で管理 |
+| カテゴリ分類 | 必須 | 1記事1カテゴリ |
+| タグ表示 | あれば | 複数可、絞り込みは後回し |
+| OGP/SEO | あれば | 記事ごとにmeta設定 |
+| 目次生成 | 後で | h2/h3から自動生成 |
+| シンタックスハイライト | 後で | コードブロック用 |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 記事データ構造
 
-## Deploy on Vercel
+**ファイル配置:** `/content/posts/[slug].md`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**メタデータ（front matter）:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| フィールド | 型 | 必須 | 説明 |
+|-----------|-----|------|------|
+| title | string | ◯ | 記事タイトル |
+| date | string | ◯ | 公開日（YYYY-MM-DD） |
+| description | string | ◯ | 記事の説明 |
+| category | string | ◯ | カテゴリ（1つ） |
+| tags | string[] | | タグ（複数可） |
+| published | boolean | ◯ | 公開フラグ |
+
+---
+
+## カテゴリ設計
+
+| カテゴリ | 用途 |
+|----------|------|
+| 技術 | 開発・プログラミング系 |
+| 日記 | 雑記・日常 |
+| お知らせ | リリース・告知 |
+
+※ 後から追加可能
+
+---
+
+## 使用技術
+
+| 用途 | 技術・ライブラリ |
+|------|-----------------|
+| フレームワーク | Next.js（App Router） |
+| スタイリング | Tailwind CSS |
+| front matter解析 | gray-matter |
+| Markdown変換 | remark + remark-html |
+| シンタックスハイライト | rehype-highlight（後で） |
+| GFM対応 | remark-gfm（後で） |
+
+---
+
+## 実装タスク
+
+- Next.jsプロジェクト作成
+- ディレクトリ構成作成
+- Tailwind設定
+- 記事読み込み処理作成
+- 記事一覧ページ
+- 記事詳細ページ
+- サンプル記事作成
+- トップページ
+- レイアウト・ナビゲーション
+- OGP/meta設定
+- デプロイ設定
